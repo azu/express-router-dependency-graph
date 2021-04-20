@@ -1,6 +1,6 @@
 {
   "name": "express-router-dependency-graph",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Create dependency graph for express routing.",
   "homepage": "https://github.com/azu/express-router-dependency-graph",
   "bugs": {
