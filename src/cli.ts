@@ -5,7 +5,7 @@ import { analyzeDependency } from "./index";
 export const cli = meow(
     `
     Usage
-      $ express-router-dependency-graph --rootDir=path/to/src
+      $ express-router-dependency-graph --rootDir=path/to/project
  
     Options
       --rootDir               [Path:String] path to root dir of source code [required]
@@ -13,7 +13,7 @@ export const cli = meow(
       --format                ["json" | "markdown"] output format. Default: json
 
     Examples
-      $ express-router-dependency-graph --rootDir=./src/
+      $ express-router-dependency-graph --rootDir=./
 `,
     {
         flags: {

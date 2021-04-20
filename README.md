@@ -11,15 +11,17 @@ Install with [npm](https://www.npmjs.com/):
 ## Usage
 
     Usage
-      $ express-router-dependency-graph --rootDir=path/to/src
+      $ express-router-dependency-graph --rootDir=path/to/project
  
     Options
-      --rootDir               [Path:String] path to root dir of source code [required]
+      --rootDir               [Path:String] path to root dir of source code. The directory should have package.json  [required]
       --rootBaseUrl           [Path:String] if pass it, replace rootDir with rootDirBaseURL in output.
       --format                ["json" | "markdown"] output format. Default: json
 
     Examples
-      $ express-router-dependency-graph --rootDir=./src/
+      $ express-router-dependency-graph --rootDir=./
+
+:memo: `--rootDir=<dir>` the directory should have package.json.
 
 ## Example
 
