@@ -10,7 +10,6 @@ Install with [npm](https://www.npmjs.com/):
 
 ## Usage
 
-
     Usage
       $ express-router-dependency-graph --rootDir=path/to/src
  
@@ -35,16 +34,15 @@ Example output: `markdown`
 | File                                     | Method | Routing                                          | Middlewares                                                                                                                                 | FilePath                                         |
 | ---------------------------------------- | ------ | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
 | user/index.ts                            |        |                                                  |                                                                                                                                             |                                                  |
-|                                          | get    | /getUserById                                     | require_viewer                                                                                                                              | user/index.ts:937:1390                           |
-|                                          | get    | /getUserList                                     | require_viewer                                                                                                                              | user/index.ts:4258:4542                          |
-|                                          | post   | /updateUserById                                      | require_editor                                                                                                                              | user/index.ts:1813:2303                          |
-|                                          | post   | /deleteUserById                                  | require_editor                                                                                                                              | user/index.ts:2306:2770                          |
+|                                          | get    | /getUserById                                     | requireView                                                                                                                              | user/index.ts#L1-3                           |
+|                                          | get    | /getUserList                                     | requireView                                                                                                                              | user/index.ts#L4-6                         |
+|                                          | post   | /updateUserById                                      | requireEdit                                                                                                                              | user/index.ts#L8-10                          |
+|                                          | post   | /deleteUserById                                  | requireEdit                                                                                                                              | user/index.ts#L12-20                        |
 | game/index.ts                       |        |                                                  |                                                                                                                                             |                                                  |
-|                                          | get    | /getGameList                                | require_viewer                                                                                                                              | game/index.ts:1854:2249                     |
-|                                          | get    | /getGameById                                | require_viewer                                                                                                                              | game/index.ts:3638:4189                     |
-|                                          | post   | /updateGameById                                 | require_editor                                                                                                                              | game/index.ts:5437:5850                     |
-|                                          | post   | /deleteGameById                             | require_editor                                                                                                                              | game/index.ts:6989:7411                     |
-
+|                                          | get    | /getGameList                                | requireView                                                                                                                              | game/index.ts#L1-3                   |
+|                                          | get    | /getGameById                                | requireView                                                                                                                              | game/index.ts#L4-6                     |
+|                                          | post   | /updateGameById                                 | requireEdit                                                                                                                              | game/index.ts#L8-10                     |
+|                                          | post   | /deleteGameById                             | requireEdit                                                                                                                              | game/index.ts#L12-20                   |
 
 ## Changelog
 

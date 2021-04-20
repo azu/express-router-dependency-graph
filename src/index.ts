@@ -17,8 +17,7 @@ const findRouting = async (filePath: string) => {
         const selector = `CallExpression:has(MemberExpression > Identifier[name="${method}"])`;
         const results = query(AST, selector);
         // router.{get,post,delete,put,use}
-        return results.flatMap((node) => {
-            // @ts-ignore
+        return results.flatMap((node: any) => {
             const pathValue =
                 node.arguments[0] !== undefined &&
                 node.arguments[0].type === "StringLiteral" &&
@@ -41,7 +40,12 @@ const findRouting = async (filePath: string) => {
                     path: pathValue,
                     middlewares,
                     // @ts-ignore
-                    range: [node.start, node.end] as [number, number]
+                    range: [node.start, node.end] as [number, number],
+                    // @ts-ignore
+                    loc: node.loc as {
+                        start: { line: number; column: number };
+                        end: { line: number; column: number };
+                    }
                 }
             ];
         });
@@ -96,12 +100,13 @@ export async function analyzeDependency({
         for (const result of allResults) {
             table.push([`${rootBaseUrl}${toRelative(result.filePath)}`]);
             result.routers.forEach((router) => {
+                console.log(router.loc);
                 table.push([
                     "",
                     router.method,
                     router.path,
                     router.middlewares.join(", ").split(/\r?\n/g).join(" "),
-                    `${rootBaseUrl}${toRelative(result.filePath)}:${router.range[0]}:${router.range[1]}`
+                    `${rootBaseUrl}${toRelative(result.filePath)}#L${router.loc.start.line}-${router.loc.end.line}`
                 ]);
             });
         }
