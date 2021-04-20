@@ -6,7 +6,7 @@ Create dependency graph for express routing.
 
 Install with [npm](https://www.npmjs.com/):
 
-    npm install express-router-dependency-graph
+    npm install express-router-dependency-graph -g
 
 ## Usage
 
