@@ -66,6 +66,7 @@ export async function analyzeDependency({
     outputFormat: "markdown" | "json";
 }) {
     const ROOT_DIR = rootDir;
+    console.log("ROOT_DIR", ROOT_DIR);
     const hasImportExpress = (dep: IDependency) => {
         return dep.dependencyTypes.includes("npm") && dep.module === "express";
     };

@@ -39,7 +39,6 @@ export const run = async (
     _input = cli.input,
     flags = cli.flags
 ): Promise<{ exitStatus: number; stdout: string | null; stderr: Error | null }> => {
-    console.log(flags.rootBaseUrl);
     const result = await analyzeDependency({
         rootDir: path.resolve(process.cwd(), flags.rootDir),
         rootBaseUrl: flags.rootBaseUrl,
