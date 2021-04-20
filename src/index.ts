@@ -71,6 +71,7 @@ export async function analyzeDependency({
         return dep.dependencyTypes.includes("npm") && dep.module === "express";
     };
     const underTheRoot = (module: IModule) => {
+        console.log("module.source", module.source);
         return toAbsolute(module.source).startsWith(ROOT_DIR);
     };
     const hasModuleImportExpress = (module: IModule) => {
