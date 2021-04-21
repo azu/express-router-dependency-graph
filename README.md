@@ -23,6 +23,8 @@ Install with [npm](https://www.npmjs.com/):
 
 :memo: `--rootDir=<dir>` the directory should have package.json.
 
+This package.json should have `express` dependencies.
+
 ## Example
 
 Example output: `markdown`
