@@ -33,18 +33,18 @@ describe("app snapshot", function () {
 | File         | Method | Routing         | Middlewares  | FilePath           |
 | ------------ | ------ | --------------- | ------------ | ------------------ |
 | src/game.ts  |        |                 |              |                    |
-|              | get    | /getGameById    | requireRead  | src/game.ts#L11-12 |
-|              | get    | /getGameList    | requireRead  | src/game.ts#L13-14 |
-|              | post   | /updateGameById | requireWrite | src/game.ts#L15-16 |
-|              | delete | /deleteGameById | requireWrite | src/game.ts#L17-18 |
+|              | get    | /getGameById    | requireRead  | src/game.ts#L11-11 |
+|              | get    | /getGameList    | requireRead  | src/game.ts#L12-12 |
+|              | post   | /updateGameById | requireWrite | src/game.ts#L13-13 |
+|              | delete | /deleteGameById | requireWrite | src/game.ts#L14-14 |
 | src/index.ts |        |                 |              |                    |
 |              | use    | /user           | user         | src/index.ts#L8-8  |
 |              | use    | /game           | game         | src/index.ts#L9-9  |
 | src/user.ts  |        |                 |              |                    |
-|              | get    | /getUserById    | requireRead  | src/user.ts#L10-11 |
-|              | get    | /getUserList    | requireRead  | src/user.ts#L12-13 |
-|              | post   | /updateUserById | requireWrite | src/user.ts#L14-15 |
-|              | delete | /deleteUserById | requireWrite | src/user.ts#L16-17 |`
+|              | get    | /getUserById    | requireRead  | src/user.ts#L10-10 |
+|              | get    | /getUserList    | requireRead  | src/user.ts#L11-11 |
+|              | post   | /updateUserById | requireWrite | src/user.ts#L12-12 |
+|              | delete | /deleteUserById | requireWrite | src/user.ts#L13-13 |`
         );
         assert.deepStrictEqual(normalize(jsonResults, rootDir), [
             {
@@ -54,29 +54,29 @@ describe("app snapshot", function () {
                         method: "get",
                         path: "/getGameById",
                         middlewares: ["requireRead"],
-                        range: [288, 338],
-                        loc: { start: { line: 11, column: 0 }, end: { line: 12, column: 2 } }
+                        range: [288, 337],
+                        loc: { start: { line: 11, column: 0 }, end: { line: 11, column: 49 } }
                     },
                     {
                         method: "get",
                         path: "/getGameList",
                         middlewares: ["requireRead"],
-                        range: [340, 390],
-                        loc: { start: { line: 13, column: 0 }, end: { line: 14, column: 2 } }
+                        range: [339, 388],
+                        loc: { start: { line: 12, column: 0 }, end: { line: 12, column: 49 } }
                     },
                     {
                         method: "post",
                         path: "/updateGameById",
                         middlewares: ["requireWrite"],
-                        range: [392, 447],
-                        loc: { start: { line: 15, column: 0 }, end: { line: 16, column: 2 } }
+                        range: [390, 444],
+                        loc: { start: { line: 13, column: 0 }, end: { line: 13, column: 54 } }
                     },
                     {
                         method: "delete",
                         path: "/deleteGameById",
                         middlewares: ["requireWrite"],
-                        range: [449, 506],
-                        loc: { start: { line: 17, column: 0 }, end: { line: 18, column: 2 } }
+                        range: [446, 502],
+                        loc: { start: { line: 14, column: 0 }, end: { line: 14, column: 56 } }
                     }
                 ]
             },
@@ -106,29 +106,29 @@ describe("app snapshot", function () {
                         method: "get",
                         path: "/getUserById",
                         middlewares: ["requireRead"],
-                        range: [287, 337],
-                        loc: { start: { line: 10, column: 0 }, end: { line: 11, column: 2 } }
+                        range: [287, 336],
+                        loc: { start: { line: 10, column: 0 }, end: { line: 10, column: 49 } }
                     },
                     {
                         method: "get",
                         path: "/getUserList",
                         middlewares: ["requireRead"],
-                        range: [339, 389],
-                        loc: { start: { line: 12, column: 0 }, end: { line: 13, column: 2 } }
+                        range: [338, 387],
+                        loc: { start: { line: 11, column: 0 }, end: { line: 11, column: 49 } }
                     },
                     {
                         method: "post",
                         path: "/updateUserById",
                         middlewares: ["requireWrite"],
-                        range: [391, 446],
-                        loc: { start: { line: 14, column: 0 }, end: { line: 15, column: 2 } }
+                        range: [389, 443],
+                        loc: { start: { line: 12, column: 0 }, end: { line: 12, column: 54 } }
                     },
                     {
                         method: "delete",
                         path: "/deleteUserById",
                         middlewares: ["requireWrite"],
-                        range: [448, 505],
-                        loc: { start: { line: 16, column: 0 }, end: { line: 17, column: 2 } }
+                        range: [445, 501],
+                        loc: { start: { line: 13, column: 0 }, end: { line: 13, column: 56 } }
                     }
                 ]
             }
