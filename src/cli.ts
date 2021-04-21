@@ -45,7 +45,7 @@ export const run = async (
         outputFormat: flags.format as "json" | "markdown"
     });
     return {
-        stdout: result,
+        stdout: flags.format === "json" ? JSON.stringify(result) : result,
         stderr: null,
         exitStatus: 0
     };

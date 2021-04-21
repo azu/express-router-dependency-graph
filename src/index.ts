@@ -67,7 +67,9 @@ export async function analyzeDependency({
 }) {
     const ROOT_DIR = rootDir;
     const hasImportExpress = (dep: IDependency) => {
-        return dep.dependencyTypes.includes("npm") && dep.module === "express";
+        return (
+            (dep.dependencyTypes.includes("npm") || dep.dependencyTypes.includes("npm-dev")) && dep.module === "express"
+        );
     };
     const underTheRoot = (module: IModule) => {
         return toAbsolute(module.source).startsWith(ROOT_DIR);
@@ -100,7 +102,6 @@ export async function analyzeDependency({
         for (const result of allResults) {
             table.push([`${rootBaseUrl}${toRelative(result.filePath)}`]);
             result.routers.forEach((router) => {
-                console.log(router.loc);
                 table.push([
                     "",
                     router.method,
@@ -112,6 +113,6 @@ export async function analyzeDependency({
         }
         return markdownTable(table);
     } else {
-        return JSON.stringify(allResults);
+        return allResults;
     }
 }
