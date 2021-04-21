@@ -33,18 +33,56 @@ Example output: `markdown`
 - Middlewares: used middlewares
 - FilePath: source code position
 
-| File                                     | Method | Routing                                          | Middlewares                                                                                                                                 | FilePath                                         |
-| ---------------------------------------- | ------ | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
-| user/index.ts                            |        |                                                  |                                                                                                                                             |                                                  |
-|                                          | get    | /getUserById                                     | requireView                                                                                                                              | user/index.ts#L1-3                           |
-|                                          | get    | /getUserList                                     | requireView                                                                                                                              | user/index.ts#L4-6                         |
-|                                          | post   | /updateUserById                                      | requireEdit                                                                                                                              | user/index.ts#L8-10                          |
-|                                          | post   | /deleteUserById                                  | requireEdit                                                                                                                              | user/index.ts#L12-20                        |
-| game/index.ts                       |        |                                                  |                                                                                                                                             |                                                  |
-|                                          | get    | /getGameList                                | requireView                                                                                                                              | game/index.ts#L1-3                   |
-|                                          | get    | /getGameById                                | requireView                                                                                                                              | game/index.ts#L4-6                     |
-|                                          | post   | /updateGameById                                 | requireEdit                                                                                                                              | game/index.ts#L8-10                     |
-|                                          | post   | /deleteGameById                             | requireEdit                                                                                                                              | game/index.ts#L12-20                   |
+| File         | Method | Routing         | Middlewares  | FilePath           |
+| ------------ | ------ | --------------- | ------------ | ------------------ |
+| src/game.ts  |        |                 |              |                    |
+|              | get    | /getGameById    | requireRead  | src/game.ts#L11-12 |
+|              | get    | /getGameList    | requireRead  | src/game.ts#L13-14 |
+|              | post   | /updateGameById | requireWrite | src/game.ts#L15-16 |
+|              | delete | /deleteGameById | requireWrite | src/game.ts#L17-18 |
+| src/index.ts |        |                 |              |                    |
+|              | use    | /user           | user         | src/index.ts#L8-8  |
+|              | use    | /game           | game         | src/index.ts#L9-9  |
+| src/user.ts  |        |                 |              |                    |
+|              | get    | /getUserById    | requireRead  | src/user.ts#L10-11 |
+|              | get    | /getUserList    | requireRead  | src/user.ts#L12-13 |
+|              | post   | /updateUserById | requireWrite | src/user.ts#L14-15 |
+|              | delete | /deleteUserById | requireWrite | src/user.ts#L16-17 |`
+
+JSON output:
+
+```json5
+[
+    {
+        method: "get",
+        path: "/getGameById",
+        middlewares: ["requireRead"],
+        range: [288, 338],
+        loc: { start: { line: 11, column: 0 }, end: { line: 12, column: 2 } }
+    },
+    {
+        method: "get",
+        path: "/getGameList",
+        middlewares: ["requireRead"],
+        range: [340, 390],
+        loc: { start: { line: 13, column: 0 }, end: { line: 14, column: 2 } }
+    },
+    {
+        method: "post",
+        path: "/updateGameById",
+        middlewares: ["requireWrite"],
+        range: [392, 447],
+        loc: { start: { line: 15, column: 0 }, end: { line: 16, column: 2 } }
+    },
+    {
+        method: "delete",
+        path: "/deleteGameById",
+        middlewares: ["requireWrite"],
+        range: [449, 506],
+        loc: { start: { line: 17, column: 0 }, end: { line: 18, column: 2 } }
+    }
+]
+```
 
 ## Changelog
 
