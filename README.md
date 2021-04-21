@@ -147,6 +147,11 @@ JSON output:
 
 See [Releases page](https://github.com/azu/express-router-dependency-graph/releases).
 
+## Related
+
+- [node.js - How to get all registered routes in Express? - Stack Overflow](https://stackoverflow.com/questions/14934452/how-to-get-all-registered-routes-in-express)
+    - Almost approach require runtime approach
+
 ## Running tests
 
 Install devDependencies and Run `npm test`:
