@@ -8,52 +8,56 @@ import query from "esquery";
 import markdownTable from "markdown-table";
 
 const findRouting = async (filePath: string) => {
-    const fileContent = await fs.readFile(filePath, "utf-8");
-    const AST = parse(fileContent, {
-        sourceType: "module",
-        plugins: ["jsx", "typescript"]
-    });
-    const search = (method: "get" | "post" | "delete" | "put" | "use", AST: any) => {
-        const selector = `CallExpression:has(MemberExpression > Identifier[name="${method}"])`;
-        const results = query(AST, selector);
-        // router.{get,post,delete,put,use}
-        return results.flatMap((node: any) => {
-            const pathValue =
-                node.arguments[0] !== undefined &&
-                node.arguments[0].type === "StringLiteral" &&
-                node.arguments[0].value;
-            if (!pathValue) {
-                return []; // skip: it will only includes middleware
-            }
-            const middlewareArguments =
-                method === "use"
-                    ? // @ts-ignore
-                      node.arguments?.slice(1) ?? []
-                    : // @ts-ignore
-                      node.arguments?.slice(1, node.arguments.length - 1) ?? [];
-            const middlewares = middlewareArguments.map((arg: { start: number; end: number }) => {
-                return fileContent.slice(arg.start, arg.end);
-            });
-            return [
-                {
-                    method,
-                    path: pathValue,
-                    middlewares,
-                    // @ts-ignore
-                    range: [node.start, node.end] as [number, number],
-                    // @ts-ignore
-                    loc: node.loc as {
-                        start: { line: number; column: number };
-                        end: { line: number; column: number };
-                    }
-                }
-            ];
+    try {
+        const fileContent = await fs.readFile(filePath, "utf-8");
+        const AST = parse(fileContent, {
+            sourceType: "module",
+            plugins: ["jsx", "typescript"]
         });
-    };
-    const methods = ["get", "post", "delete", "put", "use"] as const;
-    return methods.flatMap((method) => {
-        return search(method, AST);
-    });
+        const search = (method: "get" | "post" | "delete" | "put" | "use", AST: any) => {
+            const selector = `CallExpression:has(MemberExpression > Identifier[name="${method}"])`;
+            const results = query(AST, selector);
+            // router.{get,post,delete,put,use}
+            return results.flatMap((node: any) => {
+                const pathValue =
+                    node.arguments[0] !== undefined &&
+                    node.arguments[0].type === "StringLiteral" &&
+                    node.arguments[0].value;
+                if (!pathValue) {
+                    return []; // skip: it will only includes middleware
+                }
+                const middlewareArguments =
+                    method === "use"
+                        ? // @ts-ignore
+                          node.arguments?.slice(1) ?? []
+                        : // @ts-ignore
+                          node.arguments?.slice(1, node.arguments.length - 1) ?? [];
+                const middlewares = middlewareArguments.map((arg: { start: number; end: number }) => {
+                    return fileContent.slice(arg.start, arg.end);
+                });
+                return [
+                    {
+                        method,
+                        path: pathValue,
+                        middlewares,
+                        // @ts-ignore
+                        range: [node.start, node.end] as [number, number],
+                        // @ts-ignore
+                        loc: node.loc as {
+                            start: { line: number; column: number };
+                            end: { line: number; column: number };
+                        }
+                    }
+                ];
+            });
+        };
+        const methods = ["get", "post", "delete", "put", "use"] as const;
+        return methods.flatMap((method) => {
+            return search(method, AST);
+        });
+    } catch {
+        return [];
+    }
 };
 
 export async function analyzeDependency({
