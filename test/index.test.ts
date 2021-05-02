@@ -134,4 +134,59 @@ describe("app snapshot", function () {
             }
         ]);
     });
+    it("skip wrong path", async () => {
+        const rootDir = path.join(__dirname, "fixtures/skip-wrong-path");
+        const jsonResults = await analyzeDependency({
+            rootDir: rootDir,
+            rootBaseUrl: "",
+            outputFormat: "json"
+        });
+        assert.deepStrictEqual(normalize(jsonResults, rootDir), [
+            {
+                filePath: "<root>/src/game.ts",
+                routers: [
+                    {
+                        method: "get",
+                        path: "/getGameById",
+                        middlewares: ["requireRead"],
+                        range: [288, 337],
+                        loc: { start: { line: 11, column: 0 }, end: { line: 11, column: 49 } }
+                    },
+                    {
+                        method: "get",
+                        path: "/getGameList",
+                        middlewares: ["requireRead"],
+                        range: [339, 388],
+                        loc: { start: { line: 12, column: 0 }, end: { line: 12, column: 49 } }
+                    },
+                    {
+                        method: "post",
+                        path: "/updateGameById",
+                        middlewares: ["requireWrite"],
+                        range: [390, 444],
+                        loc: { start: { line: 13, column: 0 }, end: { line: 13, column: 54 } }
+                    },
+                    {
+                        method: "delete",
+                        path: "/deleteGameById",
+                        middlewares: ["requireWrite"],
+                        range: [446, 502],
+                        loc: { start: { line: 14, column: 0 }, end: { line: 14, column: 56 } }
+                    }
+                ]
+            },
+            {
+                filePath: "<root>/src/index.ts",
+                routers: [
+                    {
+                        method: "use",
+                        path: "/game",
+                        middlewares: ["game"],
+                        range: [165, 187],
+                        loc: { start: { line: 7, column: 0 }, end: { line: 7, column: 22 } }
+                    }
+                ]
+            }
+        ]);
+    });
 });
