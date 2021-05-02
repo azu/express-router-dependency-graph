@@ -182,7 +182,7 @@ describe("app snapshot", function () {
                         method: "use",
                         path: "/game",
                         middlewares: ["game"],
-                        range: [165, 187],
+                        range: [167, 189],
                         loc: { start: { line: 7, column: 0 }, end: { line: 7, column: 22 } }
                     }
                 ]
