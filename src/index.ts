@@ -91,7 +91,8 @@ export async function analyzeDependency({
     };
     const ARRAY_OF_FILES_AND_DIRS_TO_CRUISE: string[] = [ROOT_DIR];
     const cruiseResult: IReporterOutput = cruise(ARRAY_OF_FILES_AND_DIRS_TO_CRUISE, {
-        includeOnly
+        includeOnly,
+        doNotFollow: "^node_modules"
     });
     if (typeof cruiseResult.output !== "object") {
         throw new Error("NO OUTPUT");
