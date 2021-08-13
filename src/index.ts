@@ -63,11 +63,13 @@ const findRouting = async (filePath: string) => {
 export async function analyzeDependency({
     outputFormat,
     rootDir,
-    rootBaseUrl = ""
+    rootBaseUrl = "",
+    includeOnly
 }: {
     rootDir: string;
     rootBaseUrl: string;
     outputFormat: "markdown" | "json";
+    includeOnly?: string | string[];
 }) {
     const ROOT_DIR = rootDir;
     const hasImportExpress = (dep: IDependency) => {
@@ -88,7 +90,9 @@ export async function analyzeDependency({
         return path.relative(ROOT_DIR, toAbsolute(f));
     };
     const ARRAY_OF_FILES_AND_DIRS_TO_CRUISE: string[] = [ROOT_DIR];
-    const cruiseResult: IReporterOutput = cruise(ARRAY_OF_FILES_AND_DIRS_TO_CRUISE);
+    const cruiseResult: IReporterOutput = cruise(ARRAY_OF_FILES_AND_DIRS_TO_CRUISE, {
+        includeOnly
+    });
     if (typeof cruiseResult.output !== "object") {
         throw new Error("NO OUTPUT");
     }
