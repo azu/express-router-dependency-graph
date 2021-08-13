@@ -64,12 +64,14 @@ export async function analyzeDependency({
     outputFormat,
     rootDir,
     rootBaseUrl = "",
-    includeOnly
+    includeOnly,
+    doNotFollow
 }: {
     rootDir: string;
     rootBaseUrl: string;
     outputFormat: "markdown" | "json";
     includeOnly?: string | string[];
+    doNotFollow?: string | string[];
 }) {
     const ROOT_DIR = rootDir;
     const hasImportExpress = (dep: IDependency) => {
@@ -92,7 +94,7 @@ export async function analyzeDependency({
     const ARRAY_OF_FILES_AND_DIRS_TO_CRUISE: string[] = [ROOT_DIR];
     const cruiseResult: IReporterOutput = cruise(ARRAY_OF_FILES_AND_DIRS_TO_CRUISE, {
         includeOnly,
-        doNotFollow: "^node_modules"
+        doNotFollow
     });
     if (typeof cruiseResult.output !== "object") {
         throw new Error("NO OUTPUT");

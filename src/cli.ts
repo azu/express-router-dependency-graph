@@ -9,6 +9,7 @@ export const cli = meow(
  
     Options
       --includeOnly           [String] only include modules satisfying a pattern. https://github.com/sverweij/dependency-cruiser/blob/develop/doc/cli.md#--include-only-only-include-modules-satisfying-a-pattern 
+      --doNotFollow           [String] don't cruise modules adhering to this pattern any further. https://github.com/sverweij/dependency-cruiser/blob/develop/doc/cli.md#./options-reference.md#donotfollow-dont-cruise-modules-any-further
       --rootDir               [Path:String] path to root dir of source code [required]
       --rootBaseUrl           [Path:String] if pass it, replace rootDir with rootDirBaseURL in output.
       --format                ["json" | "markdown"] output format. Default: json
@@ -27,7 +28,13 @@ export const cli = meow(
                 default: ""
             },
             includeOnly: {
-                type: "string"
+                type: "string",
+                isMultiple: true
+            },
+            doNotFollow: {
+                type: "string",
+                isMultiple: true,
+                default: "^node_modules"
             },
             format: {
                 type: "string",
@@ -47,7 +54,8 @@ export const run = async (
         rootDir: path.resolve(process.cwd(), flags.rootDir),
         rootBaseUrl: flags.rootBaseUrl,
         outputFormat: flags.format as "json" | "markdown",
-        includeOnly: flags.includeOnly
+        includeOnly: flags.includeOnly,
+        doNotFollow: flags.doNotFollow
     });
     return {
         stdout: flags.format === "json" ? JSON.stringify(result) : result,
