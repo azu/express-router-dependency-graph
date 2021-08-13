@@ -34,7 +34,7 @@ export const cli = meow(
             doNotFollow: {
                 type: "string",
                 isMultiple: true,
-                default: "^node_modules"
+                default: ["^node_modules"] as unknown as string
             },
             format: {
                 type: "string",
