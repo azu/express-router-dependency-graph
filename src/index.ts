@@ -59,6 +59,9 @@ const findRouting = async (filePath: string) => {
         return [];
     }
 };
+const toAbsolute = (f: string) => {
+    return path.resolve(process.cwd(), f);
+};
 
 export async function analyzeDependency({
     outputFormat,
@@ -84,9 +87,6 @@ export async function analyzeDependency({
     };
     const hasModuleImportExpress = (module: IModule) => {
         return module.dependencies.some((dep) => hasImportExpress(dep));
-    };
-    const toAbsolute = (f: string) => {
-        return path.resolve(process.cwd(), f);
     };
     const toRelative = (f: string) => {
         return path.relative(ROOT_DIR, toAbsolute(f));
