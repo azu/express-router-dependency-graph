@@ -118,7 +118,7 @@ export async function analyzeDependency({
                     router.method,
                     router.path,
                     router.middlewares.join(", ").split(/\r?\n/g).join(" "),
-                    `${rootBaseUrl}${toRelative(result.filePath)}#L${router.loc.start.line}-${router.loc.end.line}`
+                    `${rootBaseUrl}${toRelative(result.filePath)}#L${router.loc.start.line}-L${router.loc.end.line}`
                 ]);
             });
         }
