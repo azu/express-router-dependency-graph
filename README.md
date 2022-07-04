@@ -38,18 +38,18 @@ Example output: `markdown`
 | File         | Method | Routing         | Middlewares  | FilePath           |
 | ------------ | ------ | --------------- | ------------ | ------------------ |
 | src/game.ts  |        |                 |              |                    |
-|              | get    | /getGameById    | requireRead  | src/game.ts#L11-12 |
-|              | get    | /getGameList    | requireRead  | src/game.ts#L13-14 |
-|              | post   | /updateGameById | requireWrite | src/game.ts#L15-16 |
-|              | delete | /deleteGameById | requireWrite | src/game.ts#L17-18 |
+|              | get    | /getGameById    | requireRead  | src/game.ts#L11-L12 |
+|              | get    | /getGameList    | requireRead  | src/game.ts#L13-L14 |
+|              | post   | /updateGameById | requireWrite | src/game.ts#L15-L16 |
+|              | delete | /deleteGameById | requireWrite | src/game.ts#L17-L18 |
 | src/index.ts |        |                 |              |                    |
-|              | use    | /user           | user         | src/index.ts#L8-8  |
-|              | use    | /game           | game         | src/index.ts#L9-9  |
+|              | use    | /user           | user         | src/index.ts#L8-L8  |
+|              | use    | /game           | game         | src/index.ts#L9-L9  |
 | src/user.ts  |        |                 |              |                    |
-|              | get    | /getUserById    | requireRead  | src/user.ts#L10-11 |
-|              | get    | /getUserList    | requireRead  | src/user.ts#L12-13 |
-|              | post   | /updateUserById | requireWrite | src/user.ts#L14-15 |
-|              | delete | /deleteUserById | requireWrite | src/user.ts#L16-17 |`
+|              | get    | /getUserById    | requireRead  | src/user.ts#L10-L11 |
+|              | get    | /getUserList    | requireRead  | src/user.ts#L12-L13 |
+|              | post   | /updateUserById | requireWrite | src/user.ts#L14-L15 |
+|              | delete | /deleteUserById | requireWrite | src/user.ts#L16-L17 |`
 
 JSON output:
 
