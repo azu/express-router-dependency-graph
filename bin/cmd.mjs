@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { run } from "../module/cli"
+import { run } from "../module/cli.js"
 
 run()
     .then(
