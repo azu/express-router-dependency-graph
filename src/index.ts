@@ -1,11 +1,10 @@
-import { cruise, IReporterOutput } from "dependency-cruiser";
-import { IDependency, IModule } from "dependency-cruiser/types/cruise-result";
+import { cruise } from "dependency-cruiser";
+import type { IDependency, IModule, IReporterOutput } from "dependency-cruiser";
 import { parse } from "@babel/parser";
-import path from "path";
-import fs from "fs/promises";
+import path from "node:path";
+import fs from "node:fs/promises";
 import query from "esquery";
-// @ts-ignore
-import markdownTable from "markdown-table";
+import { markdownTable } from "markdown-table";
 
 const findRouting = async (filePath: string) => {
     try {

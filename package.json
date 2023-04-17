@@ -2,6 +2,13 @@
   "name": "express-router-dependency-graph",
   "version": "1.1.3",
   "description": "Create dependency graph for express routing.",
+  "keywords": [
+    "node",
+    "express",
+    "dependency-graph",
+    "visualize",
+    "tool"
+  ],
   "homepage": "https://github.com/azu/express-router-dependency-graph",
   "bugs": {
     "url": "https://github.com/azu/express-router-dependency-graph/issues"
@@ -13,38 +20,37 @@
   "license": "MIT",
   "author": "azu",
   "sideEffects": false,
-  "keywords": [
-    "node",
-    "express",
-    "dependency-graph",
-    "visualize",
-    "tool"
-  ],
-  "main": "lib/index.js",
-  "module": "module/index.js",
-  "types": "lib/index.d.ts",
-  "bin": {
-    "express-router-dependency-graph": "bin/cmd.cjs"
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./module/index.d.ts",
+        "default": "./module/index.js"
+      },
+      "default": "./module/index.js"
+    },
+    "./package.json": "./package.json"
   },
-  "directories": {
-    "lib": "lib",
-    "test": "test"
+  "main": "./module/index.js",
+  "module": "module/index.js",
+  "types": "./module/index.d.ts",
+  "bin": {
+    "express-router-dependency-graph": "bin/cmd.mjs"
   },
   "files": [
     "bin/",
-    "lib/",
     "module/",
     "src/"
   ],
   "scripts": {
+    "build": "tsc --build",
+    "clean": "tsc --build --clean",
     "main": "ts-node-transpile-only src/index.ts",
-    "build": "tsc -p . && tsc -p ./tsconfig.module.json",
-    "clean": "rimraf lib/ module/",
     "prepare": "git config --local core.hooksPath .githooks",
     "prepublishOnly": "npm run clean && npm run build",
     "prettier": "prettier --write \"**/*.{js,jsx,ts,tsx,css}\"",
-    "test": "mocha \"test/**/*.test.ts\"",
-    "watch": "tsc -p . --watch"
+    "test": "mocha",
+    "watch": "tsc --build --watch"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,css}": [
@@ -57,25 +63,25 @@
     "tabWidth": 4,
     "trailingComma": "none"
   },
+  "dependencies": {
+    "@babel/parser": "^7.21.4",
+    "dependency-cruiser": "^12.11.1",
+    "esquery": "^1.5.0",
+    "markdown-table": "^3.0.3",
+    "meow": "^11.0.0"
+  },
   "devDependencies": {
     "@types/esquery": "^1.0.1",
-    "@types/express": "^4.17.11",
-    "@types/mocha": "^9.1.1",
-    "@types/node": "^18.0.0",
-    "express": "^4.18.1",
-    "lint-staged": "^13.0.3",
-    "mocha": "^10.0.0",
-    "prettier": "^2.7.1",
-    "rimraf": "^3.0.2",
-    "ts-node": "^10.8.1",
-    "ts-node-test-register": "^10.0.0",
-    "typescript": "^4.7.4"
+    "@types/express": "^4.17.17",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "^18.15.11",
+    "express": "^4.18.2",
+    "lint-staged": "^13.2.1",
+    "mocha": "^10.2.0",
+    "prettier": "^2.8.7",
+    "rimraf": "^5.0.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
   },
-  "dependencies": {
-    "@babel/parser": "^7.18.6",
-    "dependency-cruiser": "^11.11.0",
-    "esquery": "^1.4.0",
-    "markdown-table": "^2.0.0",
-    "meow": "^9.0.0"
-  }
+  "packageManager": "yarn@1.22.19"
 }

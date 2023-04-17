@@ -1,6 +1,6 @@
 import meow from "meow";
-import * as path from "path";
-import { analyzeDependency } from "./index";
+import * as path from "node:path";
+import { analyzeDependency } from "./index.js";
 
 export const cli = meow(
     `

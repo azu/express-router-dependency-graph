@@ -1,7 +1,7 @@
-import path from "path";
-import { analyzeDependency } from "../src";
-import assert from "assert";
-
+import path from "node:path";
+import assert from "node:assert";
+import { analyzeDependency } from "../src/index.js";
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
 const pathReplacer = (dirPath: string) => {
     return function replacer(key: string, value: any) {
         if (key === "filePath") {
@@ -10,7 +10,7 @@ const pathReplacer = (dirPath: string) => {
         return value;
     };
 };
-const normalize = (o: object, rootDir: string) => {
+const normalize = (o: object | string, rootDir: string) => {
     return JSON.parse(JSON.stringify(o, pathReplacer(rootDir)));
 };
 
