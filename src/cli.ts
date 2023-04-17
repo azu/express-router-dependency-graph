@@ -34,13 +34,14 @@ export const cli = meow(
             doNotFollow: {
                 type: "string",
                 isMultiple: true,
-                default: ["^node_modules"] as unknown as string
+                default: ["^node_modules"]
             },
             format: {
                 type: "string",
                 default: "json"
             }
         },
+        importMeta: import.meta,
         autoHelp: true,
         autoVersion: true
     }
@@ -58,6 +59,7 @@ export const run = async (
         doNotFollow: flags.doNotFollow
     });
     return {
+        // @ts-expect-error
         stdout: flags.format === "json" ? JSON.stringify(result) : result,
         stderr: null,
         exitStatus: 0
