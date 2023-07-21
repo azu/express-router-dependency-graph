@@ -257,4 +257,21 @@ describe("app snapshot", function () {
 |        | use    | /useEvents | Anonymous Function | app.ts#L6-L8 |`
         );
     });
+    it("should ignore req.get() for getting paramter", async () => {
+        const rootDir = path.join(__dirname, "fixtures/req.get-but-it-is-not-router");
+        const mdResults = await analyzeDependencies({
+            filePaths: await globby(["**/*.ts"], { cwd: rootDir }),
+            cwd: rootDir,
+            rootBaseUrl: "",
+            outputFormat: "markdown"
+        });
+        assert.strictEqual(
+            mdResults,
+            `\
+| File   | Method | Routing | Middlewares | FilePath     |
+| ------ | ------ | ------- | ----------- | ------------ |
+| app.ts |        |         |             |              |
+|        | get    | /get    |             | app.ts#L5-L7 |`
+        );
+    });
 });

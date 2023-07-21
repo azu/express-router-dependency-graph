@@ -18,6 +18,11 @@ const findRouting = async ({ AST, fileContent }: { AST: any; fileContent: string
                 if (!pathValue) {
                     return []; // skip: it will only includes middleware
                 }
+                // single argument should be ignored
+                // req.get("host");  it is not routing
+                if (node.arguments.length === 1) {
+                    return [];
+                }
                 const middlewareArguments =
                     method === "use"
                         ? // @ts-ignore
