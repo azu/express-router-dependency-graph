@@ -55,7 +55,7 @@ export const cli = meow(
             },
             format: {
                 type: "string",
-                default: "json"
+                default: "markdown"
             }
         },
         importMeta: import.meta,
