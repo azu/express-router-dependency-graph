@@ -1,6 +1,8 @@
 import path from "node:path";
 import assert from "node:assert";
-import { analyzeDependency } from "../src/index.js";
+import { analyzeDependencies } from "../src/index.js";
+import { globby } from "globby";
+
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 const pathReplacer = (dirPath: string) => {
     return function replacer(key: string, value: any) {
@@ -17,13 +19,15 @@ const normalize = (o: object | string, rootDir: string) => {
 describe("app snapshot", function () {
     it("test", async () => {
         const rootDir = path.join(__dirname, "fixtures/app");
-        const jsonResults = await analyzeDependency({
-            rootDir: rootDir,
+        const jsonResults = await analyzeDependencies({
+            filePaths: await globby(["**/*.ts"], { cwd: rootDir }),
+            cwd: rootDir,
             rootBaseUrl: "",
             outputFormat: "json"
         });
-        const mdResults = await analyzeDependency({
-            rootDir: rootDir,
+        const mdResults = await analyzeDependencies({
+            filePaths: await globby(["**/*.ts"], { cwd: rootDir }),
+            cwd: rootDir,
             rootBaseUrl: "",
             outputFormat: "markdown"
         });
@@ -166,8 +170,9 @@ describe("app snapshot", function () {
     });
     it("skip wrong path", async () => {
         const rootDir = path.join(__dirname, "fixtures/skip-wrong-path");
-        const jsonResults = await analyzeDependency({
-            rootDir: rootDir,
+        const jsonResults = await analyzeDependencies({
+            filePaths: await globby(["**/*.ts"], { cwd: rootDir }),
+            cwd: rootDir,
             rootBaseUrl: "",
             outputFormat: "json"
         });
