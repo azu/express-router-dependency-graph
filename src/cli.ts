@@ -5,7 +5,7 @@ import { globby } from "globby";
 export const cli = meow(
     `
     Usage
-      $ express-router-dependency-graph --rootDir=path/to/project
+      $ express-router-dependency-graph [input]
  
     Options
       --cwd                   [Path:String] current working directory. Default: process.cwd()
@@ -13,8 +13,13 @@ export const cli = meow(
       --format                ["json" | "markdown"] output format. Default: json
 
     Examples
+      # analyze all ts files in src directory
       $ express-router-dependency-graph "src/**/*.ts"
-      # change rootDir to rootDirBaseURL
+      # analyze all ts files in src directory and output markdown
+      $ express-router-dependency-graph "src/**/*.ts" --format=markdown
+      # analyze all js and files in src directory
+      $ express-router-dependency-graph "src/**/*.ts" "src/**/*.js"
+      # change rootDir to rootDirBaseURL to output
       $ express-router-dependency-graph "src/**/*.ts" --rootBaseUrl="https://github.com/owner/repo/tree/master/src"
       # include node_modules
       $ express-router-dependency-graph "src/**/*.ts" --noDefaultExcludes
