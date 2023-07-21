@@ -1,6 +1,6 @@
 {
   "name": "express-router-dependency-graph",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Create dependency graph for express routing.",
   "keywords": [
     "node",
