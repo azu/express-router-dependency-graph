@@ -25,7 +25,7 @@ export const cli = meow(
       $ express-router-dependency-graph "src/**/*.ts"
       # analyze all ts files in src directory and output json
       $ express-router-dependency-graph "src/**/*.ts" --format=json
-      # analyze all js and files in src directory
+      # analyze all js and ts files in src directory
       $ express-router-dependency-graph "src/**/*.ts" "src/**/*.js"
       # change rootDir to rootDirBaseURL to output
       $ express-router-dependency-graph "src/**/*.ts" --rootBaseUrl="https://github.com/owner/repo/tree/master/src"
