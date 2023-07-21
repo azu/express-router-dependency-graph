@@ -24,7 +24,16 @@ const findRouting = async ({ AST, fileContent }: { AST: any; fileContent: string
                           node.arguments?.slice(1) ?? []
                         : // @ts-ignore
                           node.arguments?.slice(1, node.arguments.length - 1) ?? [];
-                const middlewares = middlewareArguments.map((arg: { start: number; end: number }) => {
+                const middlewares = middlewareArguments.map((arg: { type: string; start: number; end: number }) => {
+                    // app.use(() => {});
+                    if (arg.type === "ArrowFunctionExpression") {
+                        return "Anonymous Function";
+                    }
+                    // app.use(function () {});
+                    if (arg.type === "FunctionExpression") {
+                        // @ts-ignore
+                        return arg?.id?.name ?? "Anonymous Function";
+                    }
                     return fileContent.slice(arg.start, arg.end);
                 });
                 return [

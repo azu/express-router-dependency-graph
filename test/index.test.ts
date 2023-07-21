@@ -239,4 +239,22 @@ describe("app snapshot", function () {
             }
         ]);
     });
+    it("test app.use function", async () => {
+        const rootDir = path.join(__dirname, "fixtures/app.use-function");
+        const mdResults = await analyzeDependencies({
+            filePaths: await globby(["**/*.ts"], { cwd: rootDir }),
+            cwd: rootDir,
+            rootBaseUrl: "",
+            outputFormat: "markdown"
+        });
+        assert.strictEqual(
+            mdResults,
+            `\
+| File   | Method | Routing    | Middlewares        | FilePath     |
+| ------ | ------ | ---------- | ------------------ | ------------ |
+| app.ts |        |            |                    |              |
+|        | post   | /getEvents |                    | app.ts#L3-L4 |
+|        | use    | /useEvents | Anonymous Function | app.ts#L6-L8 |`
+        );
+    });
 });
