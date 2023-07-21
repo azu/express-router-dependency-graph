@@ -77,14 +77,20 @@ interface AnalyzeDependencyParams {
 
 export async function analyzeDependency({ filePath }: AnalyzeDependencyParams) {
     const fileContent = await fs.readFile(filePath, "utf-8");
-    const AST = parse(fileContent, {
-        sourceType: "module",
-        plugins: ["jsx", "typescript"]
-    });
-    if (!hasImportExpress(AST)) {
+    try {
+        const AST = parse(fileContent, {
+            sourceType: "module",
+            plugins: ["jsx", "typescript"]
+        });
+        if (!hasImportExpress(AST)) {
+            return [];
+        }
+        return findRouting({ AST, fileContent });
+    } catch (e) {
+        console.error("Error while analyzing", filePath);
+        console.error(e);
         return [];
     }
-    return findRouting({ AST, fileContent });
 }
 
 export async function analyzeDependencies({

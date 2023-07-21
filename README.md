@@ -11,18 +11,18 @@ Install with [npm](https://www.npmjs.com/):
 ## Usage
 
     Usage
-      $ npx express-router-dependency-graph [input]
+      $ express-router-dependency-graph [input]
  
     Options
       --cwd                   [Path:String] current working directory. Default: process.cwd()
       --rootBaseUrl           [Path:String] if pass it, replace rootDir with rootDirBaseURL in output.
-      --format                ["json" | "markdown"] output format. Default: json
+      --format                ["json" | "markdown"] output format. Default: markdown
 
     Examples
       # analyze all ts files in src directory
       $ express-router-dependency-graph "src/**/*.ts"
-      # analyze all ts files in src directory and output markdown
-      $ express-router-dependency-graph "src/**/*.ts" --format=markdown
+      # analyze all ts files in src directory and output json
+      $ express-router-dependency-graph "src/**/*.ts" --format=json
       # analyze all js and files in src directory
       $ express-router-dependency-graph "src/**/*.ts" "src/**/*.js"
       # change rootDir to rootDirBaseURL to output
@@ -32,7 +32,7 @@ Install with [npm](https://www.npmjs.com/):
 
 ## Example
 
-Example output: `markdown`
+Example output: `--format=markdown`
 
 - File: file path
 - Method: get | post | put | delete | `use`(express's use)
@@ -56,7 +56,7 @@ Example output: `markdown`
 |              | post   | /updateUserById | requireWrite | src/user.ts#L14-L15 |
 |              | delete | /deleteUserById | requireWrite | src/user.ts#L16-L17 |`
 
-JSON output:
+Example output: `--format=json`
 
 ```json5
 [

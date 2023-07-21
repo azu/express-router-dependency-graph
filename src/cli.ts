@@ -10,19 +10,19 @@ export const cli = meow(
     Options
       --cwd                   [Path:String] current working directory. Default: process.cwd()
       --rootBaseUrl           [Path:String] if pass it, replace rootDir with rootDirBaseURL in output.
-      --format                ["json" | "markdown"] output format. Default: json
+      --format                ["json" | "markdown"] output format. Default: markdown
 
     Examples
       # analyze all ts files in src directory
       $ express-router-dependency-graph "src/**/*.ts"
-      # analyze all ts files in src directory and output markdown
-      $ express-router-dependency-graph "src/**/*.ts" --format=markdown
+      # analyze all ts files in src directory and output json
+      $ express-router-dependency-graph "src/**/*.ts" --format=json
       # analyze all js and files in src directory
       $ express-router-dependency-graph "src/**/*.ts" "src/**/*.js"
       # change rootDir to rootDirBaseURL to output
       $ express-router-dependency-graph "src/**/*.ts" --rootBaseUrl="https://github.com/owner/repo/tree/master/src"
       # include node_modules
-      $ express-router-dependency-graph "src/**/*.ts" --noDefaultExcludes
+      $ express-router-dependency-graph "src/**/*.ts" --no-default-excludes
 `,
     {
         flags: {
@@ -35,9 +35,9 @@ export const cli = meow(
                 type: "string",
                 default: ""
             },
-            noDefaultExcludes: {
+            defaultExcludes: {
                 type: "boolean",
-                default: false
+                default: true
             },
             excludes: {
                 type: "string",
@@ -66,7 +66,7 @@ export const run = async (
     input = cli.input,
     flags = cli.flags
 ): Promise<{ exitStatus: number; stdout: string | null; stderr: Error | null }> => {
-    const filePaths = await globby(flags.noDefaultExclude ? input : input.concat(flags.excludes), {
+    const filePaths = await globby(flags.defaultExcludes ? input.concat(flags.excludes) : input, {
         cwd: flags.cwd
     });
     const result = await analyzeDependencies({
