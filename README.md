@@ -38,6 +38,7 @@ Example output: `--format=markdown`
 - Method: get | post | put | delete | `use`(express's use)
 - Routing: routing path name
 - Middlewares: used middlewares
+  - Note: `app.use("/test", () => { ... })` is shown "Anonymous Function" middleware
 - FilePath: source code position
 
 | File         | Method | Routing         | Middlewares  | FilePath            |
