@@ -28,6 +28,7 @@ Install with [npm](https://www.npmjs.com/):
       # change rootDir to rootDirBaseURL to output
       $ express-router-dependency-graph "src/**/*.ts" --rootBaseUrl="https://github.com/owner/repo/tree/master/src"
       # include node_modules
+      # node_modules, dist, build, test, __tests__ are excluded by default
       $ express-router-dependency-graph "src/**/*.ts" --noDefaultExcludes
 
 ## Example

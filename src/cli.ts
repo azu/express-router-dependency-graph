@@ -2,6 +2,14 @@ import meow from "meow";
 import { analyzeDependencies } from "./index.js";
 import { globby } from "globby";
 
+const defaultExcludes = [
+    "!**/node_modules/**",
+    "!**/dist/**",
+    "!**/build/**",
+    "!**/coverage/**",
+    "!**/test/**",
+    "!**/__tests__/**"
+];
 export const cli = meow(
     `
     Usage
@@ -22,6 +30,7 @@ export const cli = meow(
       # change rootDir to rootDirBaseURL to output
       $ express-router-dependency-graph "src/**/*.ts" --rootBaseUrl="https://github.com/owner/repo/tree/master/src"
       # include node_modules
+      # ${JSON.stringify(defaultExcludes)} is excluded by default  
       $ express-router-dependency-graph "src/**/*.ts" --no-default-excludes
 `,
     {
@@ -42,14 +51,7 @@ export const cli = meow(
             excludes: {
                 type: "string",
                 isMultiple: true,
-                default: [
-                    "!**/node_modules/**",
-                    "!**/dist/**",
-                    "!**/build/**",
-                    "!**/coverage/**",
-                    "!**/test/**",
-                    "!**/__tests__/**"
-                ]
+                default: defaultExcludes
             },
             format: {
                 type: "string",
