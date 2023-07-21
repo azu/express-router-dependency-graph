@@ -11,17 +11,22 @@ const findRouting = async ({ AST, fileContent }: { AST: any; fileContent: string
             const results = query(AST, selector);
             // router.{get,post,delete,put,use}
             return results.flatMap((node: any) => {
+                // TODO: improve query to avoid this check
+                // res.set("X-Content-Type-Options", req.get("test")));
+                if (node.callee.property.name !== method) {
+                    return [];
+                }
+                // single argument should be ignored
+                // req.get("host");  it is not routing
+                if (node.arguments.length === 1) {
+                    return [];
+                }
                 const pathValue =
                     node.arguments[0] !== undefined &&
                     node.arguments[0].type === "StringLiteral" &&
                     node.arguments[0].value;
                 if (!pathValue) {
                     return []; // skip: it will only includes middleware
-                }
-                // single argument should be ignored
-                // req.get("host");  it is not routing
-                if (node.arguments.length === 1) {
-                    return [];
                 }
                 const middlewareArguments =
                     method === "use"

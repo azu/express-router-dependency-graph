@@ -257,8 +257,25 @@ describe("app snapshot", function () {
 |        | use    | /useEvents | Anonymous Function | app.ts#L5-L7 |`
         );
     });
-    it("should ignore req.get() for getting paramter", async () => {
+    it("should ignore req.get() for getting parameter", async () => {
         const rootDir = path.join(__dirname, "fixtures/req.get-but-it-is-not-router");
+        const mdResults = await analyzeDependencies({
+            filePaths: await globby(["**/*.ts"], { cwd: rootDir }),
+            cwd: rootDir,
+            rootBaseUrl: "",
+            outputFormat: "markdown"
+        });
+        assert.strictEqual(
+            mdResults,
+            `\
+| File   | Method | Routing | Middlewares | FilePath     |
+| ------ | ------ | ------- | ----------- | ------------ |
+| app.ts |        |         |             |              |
+|        | get    | /get    |             | app.ts#L5-L7 |`
+        );
+    });
+    it("should ignore res.set(key, req.get()) for getting parameter", async () => {
+        const rootDir = path.join(__dirname, "fixtures/res.set-get-but-it-is-not-router");
         const mdResults = await analyzeDependencies({
             filePaths: await globby(["**/*.ts"], { cwd: rootDir }),
             cwd: rootDir,
