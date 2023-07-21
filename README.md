@@ -6,28 +6,33 @@ Create dependency graph for express routing.
 
 Install with [npm](https://www.npmjs.com/):
 
-    npm install express-router-dependency-graph -g
+    npx express-router-dependency-graph "src/**/*.ts"
 
 ## Usage
 
     Usage
-      $ express-router-dependency-graph --rootDir=path/to/project
+      $ express-router-dependency-graph [input]
  
     Options
-      --rootDir               [Path:String] path to root dir of source code. The directory should have package.json  [required]
+      --cwd                   [Path:String] current working directory. Default: process.cwd()
       --rootBaseUrl           [Path:String] if pass it, replace rootDir with rootDirBaseURL in output.
-      --format                ["json" | "markdown"] output format. Default: json
+      --format                ["json" | "markdown"] output format. Default: markdown
 
     Examples
-      $ express-router-dependency-graph --rootDir=./
-
-:memo: `--rootDir=<dir>` the directory should have package.json.
-
-This package.json should have `express` dependencies.
+      # analyze all ts files in src directory
+      $ express-router-dependency-graph "src/**/*.ts"
+      # analyze all ts files in src directory and output json
+      $ express-router-dependency-graph "src/**/*.ts" --format=json
+      # analyze all js and files in src directory
+      $ express-router-dependency-graph "src/**/*.ts" "src/**/*.js"
+      # change rootDir to rootDirBaseURL to output
+      $ express-router-dependency-graph "src/**/*.ts" --rootBaseUrl="https://github.com/owner/repo/tree/master/src"
+      # include node_modules
+      $ express-router-dependency-graph "src/**/*.ts" --noDefaultExcludes
 
 ## Example
 
-Example output: `markdown`
+Example output: `--format=markdown`
 
 - File: file path
 - Method: get | post | put | delete | `use`(express's use)
@@ -51,7 +56,7 @@ Example output: `markdown`
 |              | post   | /updateUserById | requireWrite | src/user.ts#L14-L15 |
 |              | delete | /deleteUserById | requireWrite | src/user.ts#L16-L17 |`
 
-JSON output:
+Example output: `--format=json`
 
 ```json5
 [

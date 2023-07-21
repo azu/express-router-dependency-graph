@@ -1,18 +1,11 @@
-import { cruise } from "dependency-cruiser";
-import type { IDependency, IModule, IReporterOutput } from "dependency-cruiser";
 import { parse } from "@babel/parser";
 import path from "node:path";
 import fs from "node:fs/promises";
 import query from "esquery";
 import { markdownTable } from "markdown-table";
 
-const findRouting = async (filePath: string) => {
+const findRouting = async ({ AST, fileContent }: { AST: any; fileContent: string }) => {
     try {
-        const fileContent = await fs.readFile(filePath, "utf-8");
-        const AST = parse(fileContent, {
-            sourceType: "module",
-            plugins: ["jsx", "typescript"]
-        });
         const search = (method: "get" | "post" | "delete" | "put" | "use", AST: any) => {
             const selector = `CallExpression:has(MemberExpression > Identifier[name="${method}"])`;
             const results = query(AST, selector);
@@ -25,13 +18,27 @@ const findRouting = async (filePath: string) => {
                 if (!pathValue) {
                     return []; // skip: it will only includes middleware
                 }
+                // single argument should be ignored
+                // req.get("host");  it is not routing
+                if (node.arguments.length === 1) {
+                    return [];
+                }
                 const middlewareArguments =
                     method === "use"
                         ? // @ts-ignore
                           node.arguments?.slice(1) ?? []
                         : // @ts-ignore
                           node.arguments?.slice(1, node.arguments.length - 1) ?? [];
-                const middlewares = middlewareArguments.map((arg: { start: number; end: number }) => {
+                const middlewares = middlewareArguments.map((arg: { type: string; start: number; end: number }) => {
+                    // app.use(() => {});
+                    if (arg.type === "ArrowFunctionExpression") {
+                        return "Anonymous Function";
+                    }
+                    // app.use(function () {});
+                    if (arg.type === "FunctionExpression") {
+                        // @ts-ignore
+                        return arg?.id?.name ?? "Anonymous Function";
+                    }
                     return fileContent.slice(arg.start, arg.end);
                 });
                 return [
@@ -58,58 +65,77 @@ const findRouting = async (filePath: string) => {
         return [];
     }
 };
-const toAbsolute = (f: string) => {
-    return path.resolve(process.cwd(), f);
+const toAbsolute = (cwd: string, f: string) => {
+    return path.resolve(cwd, f);
 };
 
-export async function analyzeDependency({
+const hasImportExpress = (AST: any) => {
+    // import express from "express";
+    if (query(AST, "ImportDeclaration[source.value='express']").length > 0) {
+        return true;
+    }
+    // const express = require("express");
+    if (query(AST, "CallExpression[callee.name='require'][arguments.0.value='express']").length > 0) {
+        return true;
+    }
+    // const express = await import("express");
+    if (query(AST, "ImportExpression[source.value='express']").length > 0) {
+        return true;
+    }
+    return false;
+};
+
+interface AnalyzeDependencyParams {
+    filePath: string;
+}
+
+export async function analyzeDependency({ filePath }: AnalyzeDependencyParams) {
+    const fileContent = await fs.readFile(filePath, "utf-8");
+    try {
+        const AST = parse(fileContent, {
+            sourceType: "module",
+            plugins: ["jsx", "typescript"]
+        });
+        if (!hasImportExpress(AST)) {
+            return [];
+        }
+        return findRouting({ AST, fileContent });
+    } catch (e) {
+        console.error("Error while analyzing", filePath);
+        console.error(e);
+        return [];
+    }
+}
+
+export async function analyzeDependencies({
     outputFormat,
-    rootDir,
+    filePaths,
     rootBaseUrl = "",
-    includeOnly,
-    doNotFollow
+    cwd
 }: {
-    rootDir: string;
+    filePaths: string[];
     rootBaseUrl: string;
     outputFormat: "markdown" | "json";
-    includeOnly?: string | string[];
-    doNotFollow?: string | string[];
+    cwd: string;
 }) {
-    const ROOT_DIR = rootDir;
-    const hasImportExpress = (dep: IDependency) => {
-        return (
-            (dep.dependencyTypes.includes("npm") || dep.dependencyTypes.includes("npm-dev")) && dep.module === "express"
-        );
-    };
-    const underTheRoot = (module: IModule) => {
-        return toAbsolute(module.source).startsWith(ROOT_DIR);
-    };
-    const hasModuleImportExpress = (module: IModule) => {
-        return module.dependencies.some((dep) => hasImportExpress(dep));
-    };
     const toRelative = (f: string) => {
-        return path.relative(ROOT_DIR, toAbsolute(f));
+        return path.relative(cwd, f);
     };
-    const ARRAY_OF_FILES_AND_DIRS_TO_CRUISE: string[] = [ROOT_DIR];
-    const cruiseResult: IReporterOutput = cruise(ARRAY_OF_FILES_AND_DIRS_TO_CRUISE, {
-        includeOnly,
-        doNotFollow
-    });
-    if (typeof cruiseResult.output !== "object") {
-        throw new Error("NO OUTPUT");
-    }
-    const modules = cruiseResult.output.modules.filter(hasModuleImportExpress).filter(underTheRoot);
     const allResults = await Promise.all(
-        modules.map(async (mo) => {
+        filePaths.map(async (filePath) => {
+            const absoluteFilePath = toAbsolute(cwd, filePath);
             return {
-                filePath: toAbsolute(mo.source),
-                routers: await findRouting(toAbsolute(mo.source))
+                filePath: absoluteFilePath,
+                routers: await analyzeDependency({ filePath: absoluteFilePath })
             };
         })
     );
     if (outputFormat === "markdown") {
         const table = [["File", "Method", "Routing", "Middlewares", "FilePath"]];
         for (const result of allResults) {
+            if (result.routers.length === 0) {
+                continue;
+            }
             table.push([`${rootBaseUrl}${toRelative(result.filePath)}`]);
             result.routers.forEach((router) => {
                 table.push([
