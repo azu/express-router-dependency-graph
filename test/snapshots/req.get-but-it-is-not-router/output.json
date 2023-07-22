@@ -1,0 +1,28 @@
+[
+    {
+        "filePath": "<root>/app.ts",
+        "routers": [
+            {
+                "method": "get",
+                "path": "/get",
+                "middlewares": [],
+                "range": [
+                    58,
+                    141
+                ],
+                "loc": {
+                    "start": {
+                        "line": 5,
+                        "column": 0,
+                        "index": 58
+                    },
+                    "end": {
+                        "line": 7,
+                        "column": 2,
+                        "index": 141
+                    }
+                }
+            }
+        ]
+    }
+]

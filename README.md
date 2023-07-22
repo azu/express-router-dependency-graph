@@ -165,6 +165,13 @@ Install devDependencies and Run `npm test`:
 
     npm test
 
+### Add test case
+
+1. Add test case to `test/snapshot/<test-name>/app.ts`
+2. Run `npm run updateSnspahots`
+3. Check `test/snapshot/<test-name>/output.{json,md}`
+4. Commit it!
+
 ## Contributing
 
 Pull requests and stars are always welcome.

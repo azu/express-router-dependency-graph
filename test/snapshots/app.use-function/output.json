@@ -1,0 +1,51 @@
+[
+    {
+        "filePath": "<root>/app.ts",
+        "routers": [
+            {
+                "method": "post",
+                "path": "/getEvents",
+                "middlewares": [],
+                "range": [
+                    56,
+                    108
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 0,
+                        "index": 56
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 52,
+                        "index": 108
+                    }
+                }
+            },
+            {
+                "method": "use",
+                "path": "/useEvents",
+                "middlewares": [
+                    "Anonymous Function"
+                ],
+                "range": [
+                    111,
+                    193
+                ],
+                "loc": {
+                    "start": {
+                        "line": 5,
+                        "column": 0,
+                        "index": 111
+                    },
+                    "end": {
+                        "line": 7,
+                        "column": 2,
+                        "index": 193
+                    }
+                }
+            }
+        ]
+    }
+]

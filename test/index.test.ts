@@ -37,7 +37,11 @@ describe("Snapshot testing", () => {
             // UPDATE_SNAPSHOT=1 npm test
             if (process.env.UPDATE_SNAPSHOT) {
                 fs.writeFileSync(expectedMdFilePath, mdResults, "utf-8");
-                fs.writeFileSync(expectedJsonFilePath, JSON.stringify(jsonResults, null, 4), "utf-8");
+                fs.writeFileSync(
+                    expectedJsonFilePath,
+                    JSON.stringify(normalize(jsonResults, fixtureDir), null, 4),
+                    "utf-8"
+                );
                 this.skip();
                 return;
             }
