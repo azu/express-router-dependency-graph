@@ -4,6 +4,16 @@ import fs from "node:fs/promises";
 import query from "esquery";
 import { markdownTable } from "markdown-table";
 
+export type FindRoutingResult = {
+    method: "get" | "post" | "delete" | "put" | "use";
+    path: string;
+    middlewares: string[];
+    range: [number, number];
+    loc: {
+        start: { line: number; column: number };
+        end: { line: number; column: number };
+    };
+};
 const findRouting = async ({ AST, fileContent }: { AST: any; fileContent: string }) => {
     try {
         const search = (method: "get" | "post" | "delete" | "put" | "use", AST: any) => {
@@ -112,21 +122,19 @@ export async function analyzeDependency({ filePath }: AnalyzeDependencyParams) {
     }
 }
 
+export type AnalyzeDependenciesResult = {
+    filePath: string;
+    routers: FindRoutingResult[];
+};
+
 export async function analyzeDependencies({
-    outputFormat,
     filePaths,
-    rootBaseUrl = "",
     cwd
 }: {
     filePaths: string[];
-    rootBaseUrl: string;
-    outputFormat: "markdown" | "json";
     cwd: string;
-}) {
-    const toRelative = (f: string) => {
-        return path.relative(cwd, f);
-    };
-    const allResults = await Promise.all(
+}): Promise<AnalyzeDependenciesResult[]> {
+    return Promise.all(
         filePaths.map(async (filePath) => {
             const absoluteFilePath = toAbsolute(cwd, filePath);
             return {
@@ -135,25 +143,35 @@ export async function analyzeDependencies({
             };
         })
     );
-    if (outputFormat === "markdown") {
-        const table = [["File", "Method", "Routing", "Middlewares", "FilePath"]];
-        for (const result of allResults) {
-            if (result.routers.length === 0) {
-                continue;
-            }
-            table.push([`${rootBaseUrl}${toRelative(result.filePath)}`]);
-            result.routers.forEach((router) => {
-                table.push([
-                    "",
-                    router.method,
-                    router.path,
-                    router.middlewares.join(", ").split(/\r?\n/g).join(" "),
-                    `${rootBaseUrl}${toRelative(result.filePath)}#L${router.loc.start.line}-L${router.loc.end.line}`
-                ]);
-            });
-        }
-        return markdownTable(table);
-    } else {
-        return allResults;
-    }
 }
+
+export const formatMarkdown = ({
+    cwd,
+    results,
+    rootBaseUrl
+}: {
+    cwd: string;
+    results: AnalyzeDependenciesResult[];
+    rootBaseUrl: string;
+}) => {
+    const toRelative = (f: string) => {
+        return path.relative(cwd, f);
+    };
+    const table = [["File", "Method", "Routing", "Middlewares", "FilePath"]];
+    for (const result of results) {
+        if (result.routers.length === 0) {
+            continue;
+        }
+        table.push([`${rootBaseUrl}${toRelative(result.filePath)}`]);
+        result.routers.forEach((router) => {
+            table.push([
+                "",
+                router.method,
+                router.path,
+                router.middlewares.join(", ").split(/\r?\n/g).join(" "),
+                `${rootBaseUrl}${toRelative(result.filePath)}#L${router.loc.start.line}-L${router.loc.end.line}`
+            ]);
+        });
+    }
+    return markdownTable(table);
+};

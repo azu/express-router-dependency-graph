@@ -1,5 +1,5 @@
 import meow from "meow";
-import { analyzeDependencies } from "./index.js";
+import { analyzeDependencies, formatMarkdown } from "./index.js";
 import { globby } from "globby";
 
 const defaultExcludes = [
@@ -71,15 +71,26 @@ export const run = async (
     const filePaths = await globby(flags.defaultExcludes ? input.concat(flags.excludes) : input, {
         cwd: flags.cwd
     });
-    const result = await analyzeDependencies({
+    const results = await analyzeDependencies({
         cwd: flags.cwd,
-        filePaths,
-        rootBaseUrl: flags.rootBaseUrl,
-        outputFormat: flags.format as "json" | "markdown"
+        filePaths
     });
-    return {
-        stdout: typeof result === "object" ? JSON.stringify(result) : result,
-        stderr: null,
-        exitStatus: 0
-    };
+    if (flags.format === "json") {
+        return {
+            stdout: JSON.stringify(results),
+            stderr: null,
+            exitStatus: 0
+        };
+    } else if (flags.format === "markdown") {
+        return {
+            stdout: formatMarkdown({
+                cwd: flags.cwd,
+                rootBaseUrl: flags.rootBaseUrl,
+                results
+            }),
+            stderr: null,
+            exitStatus: 0
+        };
+    }
+    throw new Error(`Unknown format: ${flags.format}`);
 };
